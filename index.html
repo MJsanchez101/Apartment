@@ -1,0 +1,561 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Luxury Apartment Rentals</title>  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2c3e50',
+                        secondary: '#3498db',
+                        success: '#27ae60',
+                        danger: '#e74c3c',
+                        light: '#ecf0f1',
+                        dark: '#2c3e50',
+                    }
+                }
+            }
+        }
+    </script>
+</head>  
+<body class="font-sans text-dark bg-gray-100">  
+    <nav class="bg-primary fixed w-full top-0 z-40 shadow-md">  
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center">
+            <a href="#" class="text-white text-xl font-bold py-3">Luxury Apartments</a>
+            <button class="block md:hidden text-white focus:outline-none" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <!-- Desktop navigation menu - will be aligned to the right -->
+            <ul class="hidden md:flex md:justify-end md:items-center">  
+                <li><a href="#availability" class="text-white px-6 py-2 inline-block hover:text-secondary transition duration-300">Rooms</a></li>  
+                <li><a href="#gallery" class="text-white px-6 py-2 inline-block hover:text-secondary transition duration-300">Gallery</a></li>  
+                <li><a href="#contact" class="text-white px-6 py-2 inline-block hover:text-secondary transition duration-300">Contact</a></li>
+                <li><a href="#admin" class="text-white px-6 py-2 inline-block hover:text-secondary transition duration-300">Admin</a></li>
+            </ul>
+        </div>
+        <!-- Mobile navigation menu - only visible on mobile -->
+        <ul id="mobile-menu" class="md:hidden flex-col text-center hidden pb-3">  
+            <li><a href="#availability" class="text-white px-6 py-2 inline-block hover:text-secondary transition duration-300">Rooms</a></li>  
+            <li><a href="#gallery" class="text-white px-6 py-2 inline-block hover:text-secondary transition duration-300">Gallery</a></li>  
+            <li><a href="#contact" class="text-white px-6 py-2 inline-block hover:text-secondary transition duration-300">Contact</a></li>
+            <li><a href="#admin" class="text-white px-6 py-2 inline-block hover:text-secondary transition duration-300">Admin</a></li>
+        </ul>  
+    </div>
+</nav>    
+    <header class="h-screen flex items-center justify-center text-center text-white pt-14 bg-cover bg-center" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/api/placeholder/1920/1080')">  
+        <div class="px-4">  
+            <h1 class="text-4xl md:text-6xl mb-4 drop-shadow-lg">Premium Apartment Living</h1>  
+            <p class="text-xl">Experience luxury in the heart of the city</p>  
+        </div>  
+    </header>  
+
+    <section id="availability" class="py-8">  
+        <h2 class="text-3xl text-center mb-8">Available Suites</h2>  
+        <div class="flex justify-center mb-6">
+            <div class="inline-flex rounded-md shadow-sm">
+                <button id="filter-all" class="py-2 px-4 bg-primary text-white font-medium rounded-l-lg filter-btn active">
+                    All Floors
+                </button>
+                <button id="filter-floor-1" class="py-2 px-4 bg-primary text-white font-medium filter-btn">
+                    1st Floor
+                </button>
+                <button id="filter-floor-2" class="py-2 px-4 bg-primary text-white font-medium filter-btn">
+                    2nd Floor
+                </button>
+                <button id="filter-floor-3" class="py-2 px-4 bg-primary text-white font-medium filter-btn">
+                    3rd Floor
+                </button>
+                <button id="filter-floor-4" class="py-2 px-4 bg-primary text-white font-medium filter-btn">
+                    4th Floor
+                </button>
+                <button id="filter-floor-5" class="py-2 px-4 bg-primary text-white font-medium rounded-r-lg filter-btn">
+                    5th Floor
+                </button>
+            </div>
+        </div>
+        <div id="rooms-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-4 md:px-8"></div>  
+        <div class="flex justify-center mt-8">
+            <div class="inline-flex items-center bg-white rounded-lg shadow">
+                <button id="prev-page" class="p-2 rounded-l-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div id="pagination-info" class="px-4 py-2 text-sm">Page 1 of 1</div>
+                <button id="next-page" class="p-2 rounded-r-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>  
+
+    <section id="admin" class="py-8 px-4 md:px-8 bg-gray-200">
+        <h2 class="text-3xl text-center mb-8">Admin Controls</h2>
+        <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-md p-4 md:p-6">
+            <h3 class="text-xl font-bold mb-4">Room Status Management</h3>
+            <div class="flex flex-col md:flex-row gap-4 mb-6">
+                <div class="flex items-center">
+                    <label for="admin-filter" class="mr-2 font-medium">Filter:</label>
+                    <select id="admin-filter" class="p-2 border border-gray-300 rounded">
+                        <option value="all">All Suites</option>
+                        <option value="available">Available Only</option>
+                        <option value="occupied">Occupied Only</option>
+                    </select>
+                </div>
+                <div class="flex items-center">
+                    <label for="admin-floor-filter" class="mr-2 font-medium">Floor:</label>
+                    <select id="admin-floor-filter" class="p-2 border border-gray-300 rounded">
+                        <option value="all">All Floors</option>
+                        <option value="1">1st Floor</option>
+                        <option value="2">2nd Floor</option>
+                        <option value="3">3rd Floor</option>
+                        <option value="4">4th Floor</option>
+                        <option value="5">5th Floor</option>
+                    </select>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white">
+                    <thead>
+                        <tr class="bg-primary text-white">
+                            <th class="py-2 px-4 text-left">Suite #</th>
+                            <th class="py-2 px-4 text-left">Floor</th>
+                            <th class="py-2 px-4 text-left">Price/Night</th>
+                            <th class="py-2 px-4 text-left">Size</th>
+                            <th class="py-2 px-4 text-left">Beds</th>
+                            <th class="py-2 px-4 text-left">Status</th>
+                            <th class="py-2 px-4 text-left">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-rooms-list">
+                        <!-- Room data will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-8">  
+        <div class="max-w-2xl mx-auto p-4 md:p-8 bg-white rounded-lg shadow-md">  
+            <h2 class="text-3xl text-center mb-6">Book Your Stay</h2>  
+            <form id="bookingForm">  
+                <div class="mb-6">  
+                    <label for="name" class="block mb-2 font-bold">Full Name</label>  
+                    <input type="text" id="name" name="name" class="w-full p-3 border border-gray-300 rounded-md text-base" required>  
+                </div>  
+                <div class="mb-6">  
+                    <label for="email" class="block mb-2 font-bold">Email</label>  
+                    <input type="email" id="email" name="email" class="w-full p-3 border border-gray-300 rounded-md text-base" required>  
+                </div>  
+                <div class="mb-6">  
+                    <label for="room" class="block mb-2 font-bold">Select Suite</label>  
+                    <select id="room" name="room" class="w-full p-3 border border-gray-300 rounded-md text-base" required></select>  
+                </div>  
+                <div class="mb-6">  
+                    <label for="check-in" class="block mb-2 font-bold">Check-in Date</label>  
+                    <input type="date" id="check-in" name="check-in" class="w-full p-3 border border-gray-300 rounded-md text-base" required>  
+                </div>
+                <div class="mb-6">  
+                    <label for="check-out" class="block mb-2 font-bold">Check-out Date</label>  
+                    <input type="date" id="check-out" name="check-out" class="w-full p-3 border border-gray-300 rounded-md text-base" required>  
+                </div>
+                <div class="mb-6">
+                    <label for="special-requests" class="block mb-2 font-bold">Special Requests</label>
+                    <textarea id="special-requests" name="special-requests" class="w-full p-3 border border-gray-300 rounded-md text-base" rows="3"></textarea>
+                </div>
+                <button type="submit" class="inline-block px-6 py-3 bg-secondary text-white font-bold rounded-md hover:opacity-90 transition duration-300">Request Booking</button>  
+            </form>  
+        </div>  
+    </section>  
+
+    <footer class="bg-primary text-white py-8 px-4">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Luxury Apartments</h3>
+                    <p>Experience premium living in the heart of the city with our luxury apartment rentals.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Contact Us</h3>
+                    <p class="mb-2"><i class="fas fa-map-marker-alt mr-2"></i> 123 Luxury Ave, Cityville</p>
+                    <p class="mb-2"><i class="fas fa-phone mr-2"></i> (123) 456-7890</p>
+                    <p><i class="fas fa-envelope mr-2"></i> info@luxuryapartments.com</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Follow Us</h3>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-white hover:text-secondary"><i class="fab fa-facebook-f text-2xl"></i></a>
+                        <a href="#" class="text-white hover:text-secondary"><i class="fab fa-twitter text-2xl"></i></a>
+                        <a href="#" class="text-white hover:text-secondary"><i class="fab fa-instagram text-2xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-600 mt-8 pt-6 text-center">
+                <p>&copy; 2025 Luxury Apartments. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="confirmationModal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50 hidden">  
+        <div class="bg-white p-6 md:p-8 rounded-lg max-w-md mx-4">  
+            <h3 class="text-2xl mb-4">Booking Request Received!</h3>  
+            <p id="confirmation-details" class="mb-6">We'll contact you shortly to confirm your reservation.</p>  
+            <button class="inline-block px-6 py-3 bg-secondary text-white font-bold rounded-md hover:opacity-90 transition duration-300" onclick="closeModal()">Close</button>  
+        </div>  
+    </div>  
+
+    <script>  
+        // Generate 30 rooms across 5 floors
+        const generateRooms = () => {
+            const roomTypes = [
+                { beds: 1, size: "45 m²", minPrice: 199, maxPrice: 249 },
+                { beds: 2, size: "65 m²", minPrice: 249, maxPrice: 349 },
+                { beds: 3, size: "80 m²", minPrice: 349, maxPrice: 449 },
+                { beds: 2, size: "70 m²", minPrice: 299, maxPrice: 399 },
+                { beds: 1, size: "50 m²", minPrice: 219, maxPrice: 269 }
+            ];
+            
+            const rooms = [];
+            let roomId = 101; // Starting with 101 for 1st floor, room 01
+            
+            for (let floor = 1; floor <= 5; floor++) {
+                for (let room = 1; room <= 6; room++) { // 6 rooms per floor
+                    const roomType = roomTypes[Math.floor(Math.random() * roomTypes.length)];
+                    const price = Math.floor(Math.random() * (roomType.maxPrice - roomType.minPrice + 1)) + roomType.minPrice;
+                    
+                    rooms.push({
+                        id: roomId,
+                        floor: floor,
+                        status: Math.random() > 0.4 ? "available" : "occupied", // 60% available, 40% occupied
+                        price: price,
+                        size: roomType.size,
+                        beds: roomType.beds,
+                        image: `/api/placeholder/800/600?text=Suite%20${roomId}`
+                    });
+                    
+                    roomId = floor * 100 + room + 1;
+                }
+            }
+            
+            return rooms;
+        };
+        
+        const rooms = generateRooms();
+        let currentPage = 1;
+        const roomsPerPage = 8;
+        let currentFilter = 'all';
+        
+        // Mobile menu toggle
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Set active filter button
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('active', 'bg-secondary');
+                    b.classList.add('bg-primary');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active', 'bg-secondary');
+                this.classList.remove('bg-primary');
+                
+                // Set filter
+                const id = this.id;
+                if (id === 'filter-all') {
+                    currentFilter = 'all';
+                } else {
+                    currentFilter = parseInt(id.split('-').pop());
+                }
+                
+                // Reset to page 1
+                currentPage = 1;
+                renderRooms();
+            });
+        });
+
+        // Filter rooms based on current filter
+        function filterRooms() {
+            if (currentFilter === 'all') {
+                return rooms;
+            } else {
+                return rooms.filter(room => room.floor === currentFilter);
+            }
+        }
+        
+        // Get paginated rooms
+        function getPaginatedRooms() {
+            const filtered = filterRooms();
+            const totalPages = Math.ceil(filtered.length / roomsPerPage);
+            
+            // Update pagination info
+            document.getElementById('pagination-info').textContent = `Page ${currentPage} of ${totalPages}`;
+            
+            // Update pagination buttons
+            document.getElementById('prev-page').disabled = currentPage === 1;
+            document.getElementById('next-page').disabled = currentPage === totalPages;
+            
+            // Return paginated rooms
+            const start = (currentPage - 1) * roomsPerPage;
+            return filtered.slice(start, start + roomsPerPage);
+        }
+        
+        // Pagination event listeners
+        document.getElementById('prev-page').addEventListener('click', function() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderRooms();
+            }
+        });
+        
+        document.getElementById('next-page').addEventListener('click', function() {
+            const totalPages = Math.ceil(filterRooms().length / roomsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderRooms();
+            }
+        });
+        
+        // Admin filters
+        document.getElementById('admin-filter').addEventListener('change', function() {
+            renderAdminTable();
+        });
+        
+        document.getElementById('admin-floor-filter').addEventListener('change', function() {
+            renderAdminTable();
+        });
+
+        function renderRooms() {  
+            const container = document.getElementById('rooms-container');  
+            const select = document.getElementById('room');  
+              
+            // Clear containers
+            container.innerHTML = '';  
+            select.innerHTML = '<option value="">Select a Suite</option>';  
+
+            // Get paginated and filtered rooms
+            const displayRooms = getPaginatedRooms();
+
+            // Render room cards for customer view
+            displayRooms.forEach(room => {  
+                const roomCard = document.createElement('div');  
+                roomCard.className = 'bg-white rounded-lg overflow-hidden shadow-md transition duration-300 hover:-translate-y-1 hover:shadow-lg';  
+                
+                const statusColorClass = room.status === 'available' ? 'bg-success' : 'bg-danger';
+                
+                roomCard.innerHTML = `  
+                    <div class="h-48 bg-cover bg-center relative" style="background-image: url('${room.image}')">  
+                        <span class="${statusColorClass} absolute top-4 right-4 py-1 px-3 rounded-full text-white text-sm font-bold">${room.status.toUpperCase()}</span>  
+                    </div>  
+                    <div class="p-6">  
+                        <h3 class="text-xl font-semibold">Suite #${room.id}</h3>  
+                        <p class="text-sm text-gray-600 mb-2">Floor ${room.floor}</p>
+                        <div class="flex justify-between my-3">  
+                            <span class="flex items-center gap-2 text-sm">  
+                                <i class="fas fa-bed"></i> ${room.beds} ${room.beds > 1 ? 'beds' : 'bed'}  
+                            </span>  
+                            <span class="flex items-center gap-2 text-sm">  
+                                <i class="fas fa-expand"></i> ${room.size}  
+                            </span>  
+                        </div>  
+                        <div class="flex justify-between items-center">  
+                            <h4 class="text-lg font-bold">$${room.price}/night</h4>  
+                            ${room.status === 'available' ? 
+                            `<button class="book-now-btn px-3 py-1 bg-secondary text-white rounded-md hover:bg-blue-600 transition duration-300" data-room-id="${room.id}">Book Now</button>` : 
+                            '<span class="text-danger font-medium">Unavailable</span>'}
+                        </div>  
+                    </div>  
+                `;  
+                container.appendChild(roomCard);  
+            });
+            
+            // Add all available rooms to select dropdown (not just paginated ones)
+            rooms.filter(room => room.status === 'available').forEach(room => {  
+                const option = document.createElement('option');  
+                option.value = room.id;  
+                option.textContent = `Suite #${room.id} - Floor ${room.floor} - $${room.price}/night`;  
+                select.appendChild(option);  
+            });
+            
+            // Add event listeners to "Book Now" buttons
+            document.querySelectorAll('.book-now-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const roomId = parseInt(this.getAttribute('data-room-id'));
+                    // Pre-select the room in the dropdown
+                    document.getElementById('room').value = roomId;
+                    // Scroll to booking form
+                    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+        }
+        
+        function renderAdminTable() {
+            const adminTableBody = document.getElementById('admin-rooms-list');
+            adminTableBody.innerHTML = '';
+            
+            // Get filter values
+            const statusFilter = document.getElementById('admin-filter').value;
+            const floorFilter = document.getElementById('admin-floor-filter').value;
+            
+            // Filter rooms
+            let filteredRooms = [...rooms];
+            
+            if (statusFilter !== 'all') {
+                filteredRooms = filteredRooms.filter(room => room.status === statusFilter);
+            }
+            
+            if (floorFilter !== 'all') {
+                filteredRooms = filteredRooms.filter(room => room.floor === parseInt(floorFilter));
+            }
+            
+            // Sort by floor and room number
+            filteredRooms.sort((a, b) => a.id - b.id);
+            
+            filteredRooms.forEach(room => {
+                const tr = document.createElement('tr');
+                tr.className = room.status === 'available' ? 'bg-green-50 hover:bg-green-100' : 'bg-red-50 hover:bg-red-100';
+                
+                tr.innerHTML = `
+                    <td class="py-2 px-4 border-b">${room.id}</td>
+                    <td class="py-2 px-4 border-b">${room.floor}</td>
+                    <td class="py-2 px-4 border-b">$${room.price}</td>
+                    <td class="py-2 px-4 border-b">${room.size}</td>
+                    <td class="py-2 px-4 border-b">${room.beds}</td>
+                    <td class="py-2 px-4 border-b">
+                        <span class="px-2 py-1 rounded-full text-white font-bold text-xs ${room.status === 'available' ? 'bg-success' : 'bg-danger'}">
+                            ${room.status.toUpperCase()}
+                        </span>
+                    </td>
+                    <td class="py-2 px-4 border-b">
+                        <button class="toggle-status-btn px-3 py-1 ${room.status === 'available' ? 'bg-danger' : 'bg-success'} text-white rounded-md text-sm hover:opacity-90 transition duration-300" data-room-id="${room.id}">
+                            ${room.status === 'available' ? 'Mark Occupied' : 'Mark Available'}
+                        </button>
+                    </td>
+                `;
+                
+                adminTableBody.appendChild(tr);
+            });
+            
+            // Add event listeners to toggle status buttons in admin section
+            document.querySelectorAll('.toggle-status-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const roomId = parseInt(this.getAttribute('data-room-id'));
+                    toggleRoomStatus(roomId);
+                });
+            });
+        }
+        
+        function toggleRoomStatus(roomId) {
+            // Find the room and toggle its status
+            const room = rooms.find(room => room.id === roomId);
+            if (room) {
+                room.status = room.status === 'available' ? 'occupied' : 'available';
+                renderRooms(); // Update room display
+                renderAdminTable(); // Update admin table
+            }
+        }
+
+        function showModal(formData) {
+            const confirmationDetails = document.getElementById('confirmation-details');
+            const roomId = parseInt(formData.get('room'));
+            const room = rooms.find(room => room.id === roomId);
+            
+            let message = `Thank you for your booking request!<br><br>`;
+            message += `<strong>Name:</strong> ${formData.get('name')}<br>`;
+            message += `<strong>Email:</strong> ${formData.get('email')}<br>`;
+            message += `<strong>Suite:</strong> #${roomId} (Floor ${room ? room.floor : 'N/A'})<br>`;
+            message += `<strong>Check-in:</strong> ${formData.get('check-in')}<br>`;
+            message += `<strong>Check-out:</strong> ${formData.get('check-out')}<br>`;
+            
+            if (room) {
+                const checkIn = new Date(formData.get('check-in'));
+                const checkOut = new Date(formData.get('check-out'));
+                const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+                const totalPrice = room.price * nights;
+                
+                message += `<strong>Price:</strong> $${room.price}/night<br>`;
+                message += `<strong>Nights:</strong> ${nights}<br>`;
+                message += `<strong>Total:</strong> $${totalPrice}<br>`;
+            }
+            
+            const specialRequests = formData.get('special-requests');
+            if (specialRequests) {
+                message += `<strong>Special Requests:</strong> ${specialRequests}<br>`;
+            }
+            
+            message += `<br>We'll contact you shortly to confirm your reservation.`;
+            
+            confirmationDetails.innerHTML = message;
+            document.getElementById('confirmationModal').style.display = 'flex';  
+        }  
+
+        function closeModal() {  
+            document.getElementById('confirmationModal').style.display = 'none';  
+        }  
+
+        document.getElementById('bookingForm').addEventListener('submit', (e) => {  
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const selectedRoomId = parseInt(formData.get('room'));
+            
+            if (!selectedRoomId) {
+                alert('Please select a room.');
+                return;
+            }
+            
+            const checkIn = new Date(formData.get('check-in'));
+            const checkOut = new Date(formData.get('check-out'));
+            
+            if (checkOut <= checkIn) {
+                alert('Check-out date must be after check-in date.');
+                return;
+            }
+              
+            // Update room status  
+            const bookedRoom = rooms.find(room => room.id === selectedRoomId);  
+            if (bookedRoom) {  
+                bookedRoom.status = 'occupied';  
+                renderRooms();
+                renderAdminTable();  
+            }  
+              
+            showModal(formData);  
+            e.target.reset();  
+        });
+
+        // Set minimum date for check-in and check-out to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('check-in').setAttribute('min', today);
+        document.getElementById('check-out').setAttribute('min', today);
+        
+        // Ensure check-out date is after check-in date
+        document.getElementById('check-in').addEventListener('change', function() {
+            document.getElementById('check-out').setAttribute('min', this.value);
+            
+            // If check-out date is before check-in date, update it
+            const checkIn = new Date(this.value);
+            const checkOut = new Date(document.getElementById('check-out').value);
+            
+            if (checkOut <= checkIn) {
+                // Set check-out to day after check-in
+                const nextDay = new Date(checkIn);
+                nextDay.setDate(nextDay.getDate() + 1);
+                document.getElementById('check-out').value = nextDay.toISOString().split('T')[0];
+            }
+        });
+
+        // Initial render  
+        renderRooms();
+        renderAdminTable();  
+    </script>  
+</body>  
+</html>
